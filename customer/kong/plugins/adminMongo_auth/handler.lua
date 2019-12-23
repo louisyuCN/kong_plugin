@@ -1,13 +1,13 @@
 -- Copyright (C) Kong Inc.
 local BasePlugin = require "kong.plugins.base_plugin"
-local access = require "kong.plugins.auth_test.access"
+local access = require "kong.plugins.adminMongo_auth.access"
 
 
 local BasicAuthHandler = BasePlugin:extend()
 
 
 function BasicAuthHandler:new()
-  BasicAuthHandler.super.new(self, "auth_test")
+  BasicAuthHandler.super.new(self, "adminMongo_auth")
 end
 
 

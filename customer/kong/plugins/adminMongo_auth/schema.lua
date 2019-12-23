@@ -2,7 +2,7 @@ local typedefs = require "kong.db.schema.typedefs"
 
 
 return {
-  name = "auth_test",
+  name = "adminMongo_auth",
   fields = {
     { consumer = typedefs.no_consumer },
     { run_on = typedefs.run_on_first },

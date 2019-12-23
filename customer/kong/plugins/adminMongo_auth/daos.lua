@@ -3,7 +3,7 @@ local typedefs = require "kong.db.schema.typedefs"
 
 return {
   basicauth_credentials = {
-    dao = "kong.plugins.auth_test.basicauth_credentials",
+    dao = "kong.plugins.adminMongo_auth.basicauth_credentials",
     name = "basicauth_credentials",
     primary_key = { "id" },
     cache_key = { "username" },

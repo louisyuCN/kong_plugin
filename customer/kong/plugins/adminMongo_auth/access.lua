@@ -1,4 +1,4 @@
-local crypto = require "kong.plugins.auth_test.crypto"
+local crypto = require "kong.plugins.adminMongo_auth.crypto"
 local constants = require "kong.constants"
 
 
