@@ -18,6 +18,9 @@ local _M = {}
 local function retrieve_credentials(header_name, conf)
     local username, password
     local authorization_header = kong.request.get_header(header_name)
+
+    kong.log.debug("------------------>authorization_header" .. authorization_header)
+    kong.log.err("------------------>authorization_header" .. authorization_header)
   
     if authorization_header then
       local iterator, iter_err = re_gmatch(authorization_header, "\\s*[Bb]asic\\s*(.+)")
@@ -48,6 +51,8 @@ local function retrieve_credentials(header_name, conf)
   
           username = basic_parts[1]
           password = basic_parts[2]
+          kong.log.debug("------------------>authorization_header username" .. username)
+          kong.log.err("------------------>authorization_header username" .. username)
         end
       end
     end
