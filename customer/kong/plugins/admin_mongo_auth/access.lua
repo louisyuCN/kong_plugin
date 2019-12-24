@@ -92,8 +92,6 @@ local function do_authentication(conf)
 
   local _,_,usercode = string.find(request_url, "/mongo/app/"..connection_name.. "/([0-9a-zA-Z]+).*")
 
-  kong.log.err("------------------>usercode" .. usercode)
-
   if usercode == nil 
   then
       return true
@@ -106,6 +104,7 @@ end
 
 function _M.execute(conf)
   local ok, err = do_authentication(conf)
+  kong.log.err("------------------>test" .. ok )
   if not ok then
       return kong.response.exit(err.status, { message = err.message }, err.headers)
   end
