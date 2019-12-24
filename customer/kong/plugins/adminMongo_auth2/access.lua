@@ -90,5 +90,7 @@ local function retrieve_credentials(header_name, conf)
         return kong.response.exit(err.status, { message = err.message }, err.headers)
     end
   end
+end
 
-  return _M
+
+return _M
