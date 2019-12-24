@@ -1,4 +1,4 @@
-local crypto = require "kong.plugins.basic-auth.crypto"
+local crypto = require "kong.plugins.adminMongo_auth.crypto"
 local utils = require "kong.tools.utils"
 
 
