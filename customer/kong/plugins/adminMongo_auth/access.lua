@@ -197,7 +197,7 @@ local function do_authentication(conf)
   local connection_name = "tel"
   local request_url = kong.request.get_path()
 
-  if (request_url == "/mongo/app" or request_url == "/mongo/app"..connection_name)  then 
+  if (request_url == "/mongo/app" or request_url == "/mongo/app/"..connection_name)  then 
     return ngx.redirect("/mongo/app/"..connection_name.."/"..given_username) 
   end
 
