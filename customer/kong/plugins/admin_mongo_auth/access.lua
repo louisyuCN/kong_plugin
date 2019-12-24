@@ -99,7 +99,9 @@ local function do_authentication(conf)
     return ngx.redirect(request_url, (string.sub(m3, 0, -6)) .. "runsa")
   end
 
-  if string.match(request_url, "/[0-9a-zA-Z]+/app/[0-9a-zA-Z]+/[0-9a-zA-Z]+") then
+  local m4 = string.match(request_url, "/[0-9a-zA-Z]+/app/[0-9a-zA-Z]+/[0-9a-zA-Z]+")
+  
+  if m4 ~= nil  then
     local _, _, usercode = string.find(request_url, "/[0-9a-zA-Z]+/app/[0-9a-zA-Z]+/([0-9a-zA-Z]+)")
     
     if given_username == "runsa" then
