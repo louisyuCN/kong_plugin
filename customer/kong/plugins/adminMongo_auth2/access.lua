@@ -88,7 +88,6 @@ local function retrieve_credentials(header_name, conf)
     local ok, err = do_authentication(conf)
     if not ok then
         return kong.response.exit(err.status, { message = err.message }, err.headers)
-        end
     end
   end
 
