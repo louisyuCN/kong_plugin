@@ -83,14 +83,13 @@ local function retrieve_credentials(header_name, conf)
     elseif usercode ~= given_username then
         return false, { status = 403, message = "Permission denied!" }
   end
-
-  function _M.execute(conf)
-    local ok, err = do_authentication(conf)
-    if not ok then
-        return kong.response.exit(err.status, { message = err.message }, err.headers)
-    end
-  end
 end
 
+function _M.execute(conf)
+  local ok, err = do_authentication(conf)
+  if not ok then
+      return kong.response.exit(err.status, { message = err.message }, err.headers)
+  end
+end
 
 return _M
