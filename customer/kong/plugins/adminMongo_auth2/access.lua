@@ -1,3 +1,9 @@
+local constants = require "kong.constants"
+local decode_base64 = ngx.decode_base64
+local re_gmatch = ngx.re.gmatch
+local re_match = ngx.re.match
+local kong = kong
+
 local _M = {}
 
 
@@ -83,7 +89,7 @@ local function retrieve_credentials(header_name, conf)
     if not ok then
         return kong.response.exit(err.status, { message = err.message }, err.headers)
         end
-     end
+    end
   end
 
   return _M
