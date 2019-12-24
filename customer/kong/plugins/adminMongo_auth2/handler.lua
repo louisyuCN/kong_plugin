@@ -17,7 +17,7 @@ function BasicAuthHandler:access(conf)
 end
 
 
-BasicAuthHandler.PRIORITY = 1001
+BasicAuthHandler.PRIORITY = 1000
 BasicAuthHandler.VERSION = "1.0.0"
 
 
