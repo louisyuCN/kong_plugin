@@ -83,28 +83,30 @@ local function do_authentication(conf)
   local request_url = kong.request.get_path()
 
   if (request_url == "/mongo/app" or request_url == "/mongo/app/"..connection_name)  then 
-      return ngx.redirect("/mongo/app/"..connection_name.."/"..given_username) 
+    return ngx.redirect("/mongo/app/"..connection_name.."/"..given_username) 
   end
 
   if request_url == "/mongo/app/"..connection_name.."/admin" then
-      return ngx.redirect("/mongo/app/"..connection_name.."/runsa")
+    return ngx.redirect("/mongo/app/"..connection_name.."/runsa")
   end
 
   local _,_,usercode = string.find(request_url, "/mongo/app/"..connection_name.. "/([0-9a-zA-Z]+).*")
 
   if usercode == nil 
   then
-      return true
+    return true
   elseif given_username == "runsa" then
-      return true
+    return true
   elseif usercode ~= given_username then
-      return false, { status = 403, message = "Permission denied!" }
+    return false, { status = 403, message = "Permission denied!" }
+  else 
+    return true
   end
 end
 
 function _M.execute(conf)
   local ok, err = do_authentication(conf)
-  kong.log.err("------------------>test" .. (ok and "true" or "false") )
+  
   if not ok then
       return kong.response.exit(err.status, { message = err.message }, err.headers)
   end
