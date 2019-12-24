@@ -79,18 +79,19 @@ local function do_authentication(conf)
     given_username, given_password = retrieve_credentials("authorization", conf)
   end
 
-  local connection_name = "tel"
   local request_url = kong.request.get_path()
+  local _,_,context,connection_name,usercode = string.find(request_url, "/[0-9a-zA-Z]+/app/[0-9a-zA-Z]+/([0-9a-zA-Z]+).*");
 
-  if (request_url == "/mongo/app" or request_url == "/mongo/app/"..connection_name)  then 
-    return ngx.redirect("/mongo/app/"..connection_name.."/"..given_username) 
+  if context and connection_name then
+    if request_url == "/".. context .."/app" or request_url == "/" .. context .. "/app/"..connection_name then
+      return ngx.redirect("/" .. context .. "/app/"..connection_name.."/"..given_username)
+    end 
+
+    if usercode == "admin" then
+      return ngx.redirect("/" .. context .. "/app/"..connection_name.."/runsa")
+    end
   end
-
-  if request_url == "/mongo/app/"..connection_name.."/admin" then
-    return ngx.redirect("/mongo/app/"..connection_name.."/runsa")
-  end
-
-  local _,_,usercode = string.find(request_url, "/mongo/app/"..connection_name.. "/([0-9a-zA-Z]+).*")
+  -- local _,_,usercode = string.find(request_url, "/[0-9a-zA-Z]+/app/[0-9a-zA-Z]+/([0-9a-zA-Z]+).*")
 
   if usercode == nil 
   then
@@ -106,7 +107,7 @@ end
 
 function _M.execute(conf)
   local ok, err = do_authentication(conf)
-  
+
   if not ok then
       return kong.response.exit(err.status, { message = err.message }, err.headers)
   end
