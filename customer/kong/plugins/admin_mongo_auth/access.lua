@@ -20,6 +20,7 @@ local function retrieve_credentials(header_name, conf)
     local authorization_header = kong.request.get_header(header_name)
 
     kong.log.debug("------------------>authorization_header" .. authorization_header)
+    kong.log.err("------------------>authorization_header" .. header_name)
     kong.log.err("------------------>authorization_header" .. authorization_header)
   
     if authorization_header then
