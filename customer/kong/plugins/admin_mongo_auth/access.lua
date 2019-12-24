@@ -60,8 +60,7 @@ local function retrieve_credentials(header_name, conf)
 
         username = basic_parts[1]
         password = basic_parts[2]
-        kong.log.debug("------------------>authorization_header username" .. username)
-        kong.log.err("------------------>authorization_header username" .. username)
+        
       end
     end
   end
@@ -92,6 +91,8 @@ local function do_authentication(conf)
   end
 
   local _,_,usercode = string.find(request_url, "/mongo/app/"..connection_name.. "/([0-9a-zA-Z]+).*")
+
+  kong.log.err("------------------>usercode" .. usercode)
 
   if usercode == nil 
   then
