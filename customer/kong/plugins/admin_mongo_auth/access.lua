@@ -103,14 +103,12 @@ local function do_authentication(conf)
     local _, _, usercode = string.find(request_url, "/[0-9a-zA-Z]+/app/[0-9a-zA-Z]+/([0-9a-zA-Z]+)")
     
     if given_username == "runsa" then
-    then
       return true
     elseif usercode ~= given_username then
       return false, { status = 403, message = "Permission denied!" }
     end
 
   end 
-
   return true
 end
 
