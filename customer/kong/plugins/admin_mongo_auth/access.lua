@@ -84,13 +84,13 @@ local function do_authentication(conf)
   local m1 = string.match(request_url, "/[0-9a-zA-Z]+/app/[0-9a-zA-Z]+")
   
   if m1 then
-    return ngx.redirect(m1..default_conn..given_username)
+    return ngx.redirect(m1.. "/" ..default_conn.. "/" ..given_username)
   end
 
   local m2 = string.match(request_url, "/[0-9a-zA-Z]+/app/[0-9a-zA-Z]+/[0-9a-zA-Z]+")
 
   if m2 then
-    return ngx.redirect(m2..given_username)
+    return ngx.redirect(m2.. "/" ..given_username)
   end
 
   local m3 = string.match(request_url, "/[0-9a-zA-Z]+/app/[0-9a-zA-Z]+/admin")
