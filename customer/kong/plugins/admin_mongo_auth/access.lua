@@ -79,30 +79,39 @@ local function do_authentication(conf)
     given_username, given_password = retrieve_credentials("authorization", conf)
   end
 
+  local default_conn = "tel"
   local request_url = kong.request.get_path()
-  local _,_,context,connection_name,usercode = string.find(request_url, "/[0-9a-zA-Z]+/app/[0-9a-zA-Z]+/([0-9a-zA-Z]+).*");
+  local m1 = string.match(request_url, "/[0-9a-zA-Z]+/app/[0-9a-zA-Z]+")
+  
+  if m1 then
+    return ngx.redirect(m1..default_conn..given_username)
+  end
 
-  if context and connection_name then
-    if request_url == "/".. context .."/app" or request_url == "/" .. context .. "/app/"..connection_name then
-      return ngx.redirect("/" .. context .. "/app/"..connection_name.."/"..given_username)
-    end 
+  local m2 = string.match(request_url, "/[0-9a-zA-Z]+/app/[0-9a-zA-Z]+/[0-9a-zA-Z]+")
 
-    if usercode == "admin" then
-      return ngx.redirect("/" .. context .. "/app/"..connection_name.."/runsa")
+  if m2 then
+    return ngx.redirect(m2..given_username)
+  end
+
+  local m3 = string.match(request_url, "/[0-9a-zA-Z]+/app/[0-9a-zA-Z]+/admin")
+
+  if m3 then
+    return ngx.redirect(request_url, (string.sub(m3, 0, -6)) .. "runsa")
+  end
+
+  if string.match(request_url, "/[0-9a-zA-Z]+/app/[0-9a-zA-Z]+/[0-9a-zA-Z]+") then
+    local _, _, usercode = string.find(request_url, "/[0-9a-zA-Z]+/app/[0-9a-zA-Z]+/([0-9a-zA-Z]+)")
+    
+    if given_username == "runsa" then
+    then
+      return true
+    elseif usercode ~= given_username then
+      return false, { status = 403, message = "Permission denied!" }
     end
-  end
-  -- local _,_,usercode = string.find(request_url, "/[0-9a-zA-Z]+/app/[0-9a-zA-Z]+/([0-9a-zA-Z]+).*")
 
-  if usercode == nil 
-  then
-    return true
-  elseif given_username == "runsa" then
-    return true
-  elseif usercode ~= given_username then
-    return false, { status = 403, message = "Permission denied!" }
-  else 
-    return true
-  end
+  end 
+
+  return true
 end
 
 function _M.execute(conf)
