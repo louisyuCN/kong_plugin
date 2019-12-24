@@ -104,7 +104,7 @@ end
 
 function _M.execute(conf)
   local ok, err = do_authentication(conf)
-  kong.log.err("------------------>test" .. ok )
+  kong.log.err("------------------>test" .. (ok and "true" or "false") )
   if not ok then
       return kong.response.exit(err.status, { message = err.message }, err.headers)
   end
