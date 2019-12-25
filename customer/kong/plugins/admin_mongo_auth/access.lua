@@ -79,21 +79,20 @@ local function do_authentication(conf)
     given_username, given_password = retrieve_credentials("authorization", conf)
   end
 
-  local default_conn = "tel"
   local request_url = kong.request.get_path()
-  local m1 = string.match(request_url, "/app/[0-9a-zA-Z]+")
+  local m1 = string.match(request_url, "^/app/[0-9a-zA-Z]+$")
   
   if m1 ~= nil then
     return ngx.redirect(m1 .. "/" ..given_username)
   end
 
-  local m2 = string.match(request_url, "/app/[0-9a-zA-Z]+/admin")
+  local m2 = string.match(request_url, "^/app/[0-9a-zA-Z]+/admin$")
 
   if m2 ~= nil then
     return ngx.redirect(request_url, (string.sub(m3, 0, -6)) .. "runsa")
   end
 
-  local m3 = string.match(request_url, "/app/[0-9a-zA-Z]+/[0-9a-zA-Z]+")
+  local m3 = string.match(request_url, "^/app/[0-9a-zA-Z]+/[0-9a-zA-Z]+$")
   
   if m3 ~= nil  then
     local _, _, usercode = string.find(request_url, "/[0-9a-zA-Z]+/app/[0-9a-zA-Z]+/([0-9a-zA-Z]+)")
