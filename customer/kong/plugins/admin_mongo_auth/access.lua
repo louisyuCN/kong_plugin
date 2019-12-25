@@ -73,6 +73,7 @@ local function retrieve_credentials(header_name, conf)
 end
 
 local function do_authentication(conf)
+  --获取basic_auth用户信息
   local given_username, given_password = retrieve_credentials("proxy-authorization", conf)
 
   if not given_username then
@@ -92,7 +93,7 @@ local function do_authentication(conf)
     return ngx.redirect((string.sub(m2, 0, -6)) .. "runsa")
   end
 
-  local m3 = string.match(request_url, "^/app/[0-9a-zA-Z]+/[0-9a-zA-Z]+$")
+  local m3 = string.match(request_url, "^/app/[0-9a-zA-Z]+/[0-9a-zA-Z]+.*$")
   
   if m3 ~= nil  then
     local _, _, usercode = string.find(request_url, "/app/[0-9a-zA-Z]+/([0-9a-zA-Z]+)")
