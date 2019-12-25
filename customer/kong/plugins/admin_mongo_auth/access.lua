@@ -63,6 +63,17 @@ local function retrieve_credentials(header_name, conf)
   return username, password
 end
 
+-- 对比用户 --
+local function checkUsercode(usercode, given_username)
+  if given_username == "runsa" then
+    return true
+  elseif usercode ~= given_username then
+    return false, { status = 403, message = "Permission denied!" }
+  else 
+    return true
+  end
+end
+
 -- 验证权限 --
 local function do_authentication(conf)
   local given_username, given_password = retrieve_credentials("proxy-authorization", conf)
@@ -99,16 +110,6 @@ local function do_authentication(conf)
   else 
     return true
   end 
-end
-
-local function checkUsercode(usercode, given_username)
-  if given_username == "runsa" then
-    return true
-  elseif usercode ~= given_username then
-    return false, { status = 403, message = "Permission denied!" }
-  else 
-    return true
-  end
 end
 
 -- export --
