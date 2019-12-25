@@ -6,18 +6,9 @@ local kong = kong
 
 local _M = {}
 
-
--- Fast lookup for credential retrieval depending on the type of the authentication
---
--- All methods must respect:
---
--- @param request ngx request object
--- @param {table} conf Plugin config
--- @return {string} public_key
--- @return {string} private_key
+-- 获取账号密码 --
 local function retrieve_credentials(header_name, conf)
 
-  -- If both headers are missing, return 401
   if not (kong.request.get_header("authorization") or kong.request.get_header("proxy-authorization")) then
     return false, {
       status = 401,
@@ -72,8 +63,8 @@ local function retrieve_credentials(header_name, conf)
   return username, password
 end
 
+-- 验证权限 --
 local function do_authentication(conf)
-  --获取basic_auth用户信息
   local given_username, given_password = retrieve_credentials("proxy-authorization", conf)
 
   if not given_username then
@@ -83,31 +74,44 @@ local function do_authentication(conf)
   local request_url = kong.request.get_path()
   local m1 = string.match(request_url, "^/app/[0-9a-zA-Z]+$")
   
+  -- /app/runsaec 转发 -> /app/runsaec/given_username --
   if m1 ~= nil then
     return ngx.redirect(m1 .. "/" ..given_username)
   end
 
   local m2 = string.match(request_url, "^/app/[0-9a-zA-Z]+/admin$")
 
+  -- /app/runsaec/admin 转发 -> /app/runsaec/runsa --
   if m2 ~= nil then
     return ngx.redirect((string.sub(m2, 0, -6)) .. "runsa")
   end
 
   local m3 = string.match(request_url, "^/app/[0-9a-zA-Z]+/[0-9a-zA-Z]+.*$")
+  local m4 = string.match(request_url, "^/api/[0-9a-zA-Z]+/[0-9a-zA-Z]+.*$")
   
-  if m3 ~= nil  then
+  -- 登录的账号和url中的客户号比较 --
+  if m3 ~= nil then
     local _, _, usercode = string.find(request_url, "/app/[0-9a-zA-Z]+/([0-9a-zA-Z]+)")
-    
-    if given_username == "runsa" then
-      return true
-    elseif usercode ~= given_username then
-      return false, { status = 403, message = "Permission denied!" }
-    end
-
+    return checkUsercode(usercode, given_username)
+  elseif m4 ~= nil then 
+    local _, _, usercode = string.find(request_url, "/api/[0-9a-zA-Z]+/([0-9a-zA-Z]+)")
+    return checkUsercode(usercode, given_password)
+  else 
+    return true
   end 
-  return true
 end
 
+local function checkUsercode(usercode, given_username)
+  if given_username == "runsa" then
+    return true
+  elseif usercode ~= given_username then
+    return false, { status = 403, message = "Permission denied!" }
+  else 
+    return true
+  end
+end
+
+-- export --
 function _M.execute(conf)
   local ok, err = do_authentication(conf)
 
