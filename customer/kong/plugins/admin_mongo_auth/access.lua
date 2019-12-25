@@ -95,7 +95,7 @@ local function do_authentication(conf)
   local m3 = string.match(request_url, "^/app/[0-9a-zA-Z]+/[0-9a-zA-Z]+$")
   
   if m3 ~= nil  then
-    local _, _, usercode = string.find(request_url, "/[0-9a-zA-Z]+/app/[0-9a-zA-Z]+/([0-9a-zA-Z]+)")
+    local _, _, usercode = string.find(request_url, "/app/[0-9a-zA-Z]+/([0-9a-zA-Z]+)")
     
     if given_username == "runsa" then
       return true
