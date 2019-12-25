@@ -106,7 +106,7 @@ local function do_authentication(conf)
     return checkUsercode(usercode, given_username)
   elseif m4 ~= nil then 
     local _, _, usercode = string.find(request_url, "/api/[0-9a-zA-Z]+/([0-9a-zA-Z]+)")
-    return checkUsercode(usercode, given_password)
+    return checkUsercode(usercode, given_username)
   else 
     return true
   end 
