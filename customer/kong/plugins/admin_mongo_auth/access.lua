@@ -89,7 +89,7 @@ local function do_authentication(conf)
   local m2 = string.match(request_url, "^/app/[0-9a-zA-Z]+/admin$")
 
   if m2 ~= nil then
-    return ngx.redirect(request_url, (string.sub(m3, 0, -6)) .. "runsa")
+    return ngx.redirect((string.sub(m2, 0, -6)) .. "runsa")
   end
 
   local m3 = string.match(request_url, "^/app/[0-9a-zA-Z]+/[0-9a-zA-Z]+$")
